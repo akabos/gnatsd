@@ -81,6 +81,7 @@ func (s *Server) HandleConnz(w http.ResponseWriter, r *http.Request) {
 
 	auth, _ := strconv.Atoi(r.URL.Query().Get("auth"))
 	subs, _ := strconv.Atoi(r.URL.Query().Get("subs"))
+	tlsinfo, _ := strconv.Atoi(r.URL.Query().Get("tlsinfo"))
 	c.Offset, _ = strconv.Atoi(r.URL.Query().Get("offset"))
 	if c.Offset < 0 {
 		c.Offset = 0
@@ -208,7 +209,7 @@ func (s *Server) HandleConnz(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// If the connection is gone, too bad, we won't set TLSVersion and TLSCipher.
-		if tlsRequired && client.nc != nil {
+		if tlsinfo == 1 && tlsRequired && client.nc != nil {
 			conn := client.nc.(*tls.Conn)
 			cs := conn.ConnectionState()
 			ci.TLSVersion = tlsVersion(cs.Version)
